@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Firebase Authentication</title>
+
+        <script src="https://www.gstatic.com/firebasejs/7.6.1/firebase.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/vue"></script>
+</head>
+<body>
+    <div id="app">
+        <h1>Vue School - Firebase Authentication</h1>
+
+            <div v-if="authUser">
+                <h2>Signed in as {{authUser.email}}</h2>
+                <button @click="signOut">Sign Out</button>
+            </div>
+
+           <div v-else>
+            <form @submit.prevent="register">
+
+                <h2>Register</h2>
+
+                <input type="email" v-model="email" placeholder="Type your email"/>
+
+                <input type="password" v-model="password" placeholder="Type your password"/>
+
+                <button>Register</button>
+
+            </form>
+
+           </div>
+     
+    </div>
+<script>
+  // Your web app's Firebase configuration
+  var firebaseConfig = {
+    apiKey: "AIzaSyAD98nBcuGkgbyl9aCR48jw73yBwCHPbeU",
+    authDomain: "auth-firebase-vue.firebaseapp.com",
+    databaseURL: "https://auth-firebase-vue.firebaseio.com",
+    projectId: "auth-firebase-vue",
+    storageBucket: "auth-firebase-vue.appspot.com",
+    messagingSenderId: "579572268851",
+    appId: "1:579572268851:web:c32b763459cd4cfcd28846",
+    measurementId: "G-ZX44KGT4HF"
+  };
+  // Initialize Firebase
+  firebase.initializeApp(firebaseConfig);
+  firebase.analytics();
+
+
+        new Vue({
+            el:"#app",
+            data:{
+                email:'',
+                password:'',
+                authUser:'',
+            },
+            methods: {
+                register()
+                {
+                    // <!-- firebase.auth().createUserWithEmailAndPassword('lucascorporation@live.com','Linux_Ferrari') -->
+                    if(firebase.auth().createUserWithEmailAndPassword(this.email,this.password))
+                    {
+                        clear();
+                    }
+                },
+                signOut()
+                {
+                    firebase.auth().signOut();
+                },
+                clear()
+                {
+                    this.email ="";
+                    this.password ="";
+                }
+            },
+            created() {
+                
+                    firebase.auth().onAuthStateChanged(user=>{this.authUser = user})
+            },
+        })
+
+      
+
+</script>
+</body>
+</html>
