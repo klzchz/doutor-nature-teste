@@ -44,6 +44,11 @@
             </form>
 
            </div>
+
+           <div>
+               <h2>Sing In With Google</h2>
+               <button @click="signInWithGoogle" >Sign In</button>
+           </div>
      
     </div>
 <script>
@@ -75,23 +80,58 @@
                 {
                     // <!-- firebase.auth().createUserWithEmailAndPassword('lucascorporation@live.com','Linux_Ferrari') -->
                   firebase.auth().createUserWithEmailAndPassword(this.email,this.password)
+                  .then(user=>{ this.authUser = user})
+                
+                .catch(error =>{
                     
-                        clear();
+                    // console.log(error.message);
+
+                    alert(error.message);
+
+                });
+                    
+                        
                     
                 },
                 signOut()
                 {
-                    firebase.auth().signOut();
+                    firebase.auth().signOut().then(()=>{this.authUser =''});
+                    this.clear();
                 },
                 signIn()
                 {
-                    firebase.auth().signInWithEmailAndPassword(this.email,this.password);
-                    clear();
+                    firebase.auth().signInWithEmailAndPassword(this.email,this.password)
+                    .then(user=>{ this.authUser = user})
+                    .catch(error =>{
+                        
+                        // console.log(error.message);
+
+                        alert(error.message);
+
+                    });
+
+                    
                 },
                 clear()
                 {
                     this.email ="";
                     this.password ="";
+                },
+                signInWithGoogle:() =>{
+
+                    const provider = new firebase.auth.GoogleAuthProvider()
+
+                    firebase.auth().signInWithPopup(provider)
+                    .catch(error =>{
+                        
+                        // console.log(error.message);
+
+                        alert(error.message);
+
+                    })
+                    .then(data=>{console.log(data.user,data.credential.accessToken)})
+
+
                 }
             },
             created() {
