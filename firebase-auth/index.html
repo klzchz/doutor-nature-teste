@@ -23,11 +23,23 @@
 
                 <h2>Register</h2>
 
-                <input type="email" v-model="email" placeholder="Type your email"/>
+                <input v-once="email" type="email" v-model="email" placeholder="Type your email"/>
 
-                <input type="password" v-model="password" placeholder="Type your password"/>
+                <input v-once="password"  type="password" v-model="password" placeholder="Type your password"/>
 
                 <button>Register</button>
+
+            </form>
+
+            <form @submit.prevent="signIn">
+
+                <h2>Sign in</h2>
+
+                <input  type="email" v-model="email" placeholder="Type your email"/>
+
+                <input  type="password" v-model="password" placeholder="Type your password"/>
+
+                <button>Sign in</button>
 
             </form>
 
@@ -62,14 +74,19 @@
                 register()
                 {
                     // <!-- firebase.auth().createUserWithEmailAndPassword('lucascorporation@live.com','Linux_Ferrari') -->
-                    if(firebase.auth().createUserWithEmailAndPassword(this.email,this.password))
-                    {
+                  firebase.auth().createUserWithEmailAndPassword(this.email,this.password)
+                    
                         clear();
-                    }
+                    
                 },
                 signOut()
                 {
                     firebase.auth().signOut();
+                },
+                signIn()
+                {
+                    firebase.auth().signInWithEmailAndPassword(this.email,this.password);
+                    clear();
                 },
                 clear()
                 {
